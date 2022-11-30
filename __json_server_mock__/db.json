@@ -1,0 +1,42 @@
+{
+  "dashboard": [
+    {
+      "id": "2022-12-14",
+      "ps": "禎展"
+    },
+    {
+      "id": "2022-11-3",
+      "ps": "11/3 備註"
+    }
+  ],
+  "teacher": [
+    {
+      "id": 1,
+      "name": "測試人員",
+      "phone": "0912345678",
+      "email": "testUser123@gmail.com",
+      "manageSchool": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 1,
+      "name": "謝禎展",
+      "phone": "0976216195",
+      "email": "",
+      "manageSchool": [
+        1,
+        2,
+        3
+      ]
+    }
+  ],
+  "school": [
+    {
+      "id": 1,
+      "name": "測試學校",
+      "email": "testSchool123@gmail.com"
+    }
+  ]
+}

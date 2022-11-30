@@ -1,30 +1,30 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  <n-config-provider :theme="darkTheme">
+    <Layout :routerData="routes">
+      <template #routerView>
+        <router-view />
+      </template>
+    </Layout>
+  </n-config-provider>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import { defineComponent, ref } from 'vue'
+import { darkTheme } from 'naive-ui'
+import Layout from '@/layout/Layout.vue'
+import { routes } from '@/router'
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+export default defineComponent({
+  components: {
+    Layout
+  },
+  setup() {
+    return {
+      darkTheme,
+      routes
     }
   }
-}
-</style>
+})
+</script>
+
+<style lang="scss" scoped></style>

@@ -1,0 +1,62 @@
+$size-list: (
+  xs: 4px,
+  sm: 8px,
+  md: 16px,
+  lg: 24px,
+  xl: 32px,
+  xxl: 40px
+);
+
+.card {
+  box-shadow: 1px 1px 6px 2px #77a0d1;
+}
+
+@each $size, $value in $size-list {
+  .n-pa-#{$size} {
+    padding: $value !important;
+  }
+  .n-px-#{$size} {
+    padding: 0 $value !important;
+  }
+  .n-py-#{$size} {
+    padding: $value 0 !important;
+  }
+  .n-pt-#{$size} {
+    padding-top: $value !important;
+  }
+  .n-pb-#{$size} {
+    padding-bottom: $value !important;
+  }
+  .n-pl-#{$size} {
+    padding-left: $value !important;
+  }
+  .n-pr-#{$size} {
+    padding-right: $value !important;
+  }
+
+  .n-ma-#{$size} {
+    margin: $value !important;
+  }
+  .n-mx-#{$size} {
+    margin: 0 $value !important;
+  }
+  .n-my-#{$size} {
+    margin: $value 0 !important;
+  }
+  .n-mt-#{$size} {
+    margin-top: $value !important;
+  }
+  .n-mb-#{$size} {
+    margin-bottom: $value !important;
+  }
+  .n-ml-#{$size} {
+    margin-left: $value !important;
+  }
+  .n-mr-#{$size} {
+    margin-right: $value !important;
+  }
+
+  .n-ga-#{$size} {
+    gap: $value !important;
+  }
+}

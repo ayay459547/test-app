@@ -1,25 +1,51 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import Home from "@/views/Home.vue";
 
-const routes = [
+import { Grid, School as Student } from "@vicons/ionicons5";
+
+import { ChalkboardTeacher, School } from "@vicons/fa";
+
+import { DataTable } from "@vicons/carbon";
+
+export const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    title: "儀錶板",
+    icon: Grid,
+    component: Home,
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+    path: "/teacher",
+    name: "Teacher",
+    title: "教師管理",
+    icon: ChalkboardTeacher,
+    component: () => import("@/views/Teacher.vue"),
+  },
+  {
+    path: "/school",
+    name: "School",
+    title: "學校管理",
+    icon: School,
+    component: () => import("@/views/School.vue"),
+  },
+  {
+    path: "/student",
+    name: "Student",
+    title: "學生管理",
+    icon: Student,
+    component: () => import("@/views/Student.vue"),
+  },
+  {
+    path: "/record",
+    name: "Record",
+    title: "記錄管理",
+    icon: DataTable,
+    component: () => import("@/views/Record.vue"),
+  },
+];
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
-
-export default router
+  routes,
+});
