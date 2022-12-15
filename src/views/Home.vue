@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted } from "vue";
-import { isYesterday, addDays } from "date-fns/esm";
+import { defineComponent, ref, reactive, onMounted } from "vue"
+import { isYesterday, addDays } from "date-fns/esm"
 import http from '@/lib/axios.js'
 
 export default defineComponent({
@@ -57,6 +57,7 @@ export default defineComponent({
 
     const init = async() => {
       loading.value = true
+      calendarData.value = {}
       await getCalendarData()
 
       loading.value = false
@@ -112,17 +113,17 @@ export default defineComponent({
       },
       isDateDisabled(timestamp) {
         if (isYesterday(timestamp)) {
-          return true;
+          return true
         }
-        return false;
+        return false
       },
       calendarData,
       showModal,
       setCalendarData,
       modalData
-    };
+    }
   }
-});
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,11 +1,11 @@
-import { createRouter, createWebHistory } from "vue-router";
-import Home from "@/views/Home.vue";
+import { createRouter, createWebHistory } from "vue-router"
+import Home from "@/views/Home.vue"
 
-import { Grid, School as Student } from "@vicons/ionicons5";
+import { Grid, School as Student } from "@vicons/ionicons5"
 
-import { ChalkboardTeacher, School } from "@vicons/fa";
+import { ChalkboardTeacher, School } from "@vicons/fa"
 
-import { DataTable } from "@vicons/carbon";
+import { DataTable } from "@vicons/carbon"
 
 export const routes = [
   {
@@ -43,9 +43,9 @@ export const routes = [
     icon: DataTable,
     component: () => import("@/views/Record.vue"),
   },
-];
+]
 
 export const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-});
+})

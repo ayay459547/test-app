@@ -1,6 +1,6 @@
 <template>
   <n-button :type="type" strong ghost>
-    <template v-if="icon !== ''" #icon>
+    <template v-if="icon !== null" #icon>
       <n-icon :component="icon" size="20" :color="color"/>
     </template>
     <div class="btn-title" :style="textStyle">{{ title }}</div>
@@ -24,7 +24,7 @@ const props = defineProps({
   },
   icon: {
     type: Object,
-    default: ''
+    default: null
   }
 })
 
@@ -36,8 +36,4 @@ const textStyle = computed(() => {
 
 </script>
 <style lang="scss" scoped>
-.btn-title {
-  // font-size: 1.2em;
-  // font-weight: 600;
-}
 </style>

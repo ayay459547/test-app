@@ -1,5 +1,6 @@
 import { getCurrentInstance, createVNode, render } from 'vue'
 import Loading from '@/components/Loading.vue'
+import objectFunc from './objectFunc.js'
 
 // v-loading
 const vnode = createVNode(Loading)
@@ -50,5 +51,18 @@ export const vLoading = {
     return globalProperties[props]
   } else {
     return 'empty'
+  }
+}
+
+/**
+ * 可讓Object全局使用類似Array方法
+ */
+for (let key in objectFunc) {
+  if (objectFunc[key].inject && !Object.prototype[key]) {
+    Object.defineProperty(Object.prototype, key, {
+      get() {
+        return objectFunc[key].func
+      },
+    })
   }
 }

@@ -1,16 +1,12 @@
 {
   "dashboard": [
     {
-      "id": "2022-12-14",
-      "ps": "禎展"
+      "id": "2022-12-16",
+      "ps": "5:00"
     },
     {
-      "id": "2022-11-3",
-      "ps": "11/3 備註"
-    },
-    {
-      "id": "2022-11-10",
-      "ps": "777"
+      "id": "2022-12-18",
+      "ps": "5:45"
     }
   ],
   "teacher": [
@@ -28,19 +24,82 @@
       "id": 2,
       "name": "測試人員2",
       "phone": "0987654321",
-      "email": "",
+      "email": "testUser2@gmail.com",
       "manageSchool": [
         1,
         2,
         3
-      ]
+      ],
+      "key": 2
+    },
+    {
+      "id": 3,
+      "name": "小丸子",
+      "phone": "0956432879",
+      "email": "vul36678@gmail.com",
+      "manageSchool": [
+        2,
+        4
+      ],
+      "key": 3
     }
   ],
   "school": [
     {
       "id": 1,
       "name": "測試學校",
+      "phone": "031857462",
       "email": "testSchool123@gmail.com"
+    },
+    {
+      "id": 2,
+      "name": "測試學校2",
+      "phone": "031857463",
+      "email": "testSchool321@gmail.com"
+    },
+    {
+      "id": 3,
+      "name": "測試學校3",
+      "phone": "031857468",
+      "email": "testSchool456@gmail.com"
+    },
+    {
+      "name": "測試學校4",
+      "phone": "034415548",
+      "email": "setnkl4568@gmail.com",
+      "id": 4
+    }
+  ],
+  "student": [
+    {
+      "id": 1,
+      "name": "學生1",
+      "phone": "0987654321",
+      "email": "testStudent123@gmail.com",
+      "fromSchool": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 2,
+      "name": "學生2",
+      "phone": "0986654321",
+      "email": "testStudent456@gmail.com",
+      "fromSchool": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 3,
+      "name": "學生3",
+      "phone": "0987677321",
+      "email": "testStudent789@gmail.com",
+      "fromSchool": [
+        1,
+        2
+      ]
     }
   ]
 }

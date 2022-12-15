@@ -1,28 +1,28 @@
-export const isFalsy = (value) => (value === 0 ? false : !value);
+export const isFalsy = (value) => (value === 0 ? false : !value)
 
 export const cleanOjbect = (object) => {
-  const result = { ...object };
+  const result = { ...object }
 
   Object.keys(result).forEach((key) => {
-    const value = result[key];
+    const value = result[key]
 
     if (isFalsy(value)) {
-      delete result[key];
+      delete result[key]
     }
-  });
+  })
 
-  return result;
-};
+  return result
+}
 
 function defaultSetFun(obj, key, value) {
-  obj[key] = value;
+  obj[key] = value
 }
 
 export const deepClone = (targetElement, origin, setFun) => {
-  let toStr = Object.prototype.toString;
-  let target = targetElement || {};
+  let toStr = Object.prototype.toString
+  let target = targetElement || {}
   if (!setFun) {
-    setFun = defaultSetFun;
+    setFun = defaultSetFun
   }
 
   for (let prop in origin) {
@@ -32,43 +32,43 @@ export const deepClone = (targetElement, origin, setFun) => {
           // 如果 target 是 array
           switch (toStr.call(origin[prop])) {
             case "[object Array]":
-              target[prop].push([]);
-              deepClone(target[prop], origin[prop]);
-              break;
+              target[prop].push([])
+              deepClone(target[prop], origin[prop])
+              break
             case "[object Object]":
-              target[prop].push({});
-              deepClone(target[prop], origin[prop]);
-              break;
+              target[prop].push({})
+              deepClone(target[prop], origin[prop])
+              break
             default:
-              target[prop].push(origin[prop]);
+              target[prop].push(origin[prop])
               // setFun(target, prop, origin[prop])
-              break;
+              break
           }
-          break;
+          break
         case "[object Object]":
           // 如果 target 是 object
           switch (toStr.call(origin[prop])) {
             case "[object Array]":
-              target[prop] = [];
-              deepClone(target[prop], origin[prop]);
-              break;
+              target[prop] = []
+              deepClone(target[prop], origin[prop])
+              break
             case "[object Object]":
-              target[prop] = {};
-              deepClone(target[prop], origin[prop]);
-              break;
+              target[prop] = {}
+              deepClone(target[prop], origin[prop])
+              break
             default:
-              setFun(target, prop, origin[prop]);
-              break;
+              setFun(target, prop, origin[prop])
+              break
           }
-          break;
+          break
         default:
-          setFun(target, prop, origin[prop]);
-          break;
+          setFun(target, prop, origin[prop])
+          break
       }
     }
   }
-  return target;
-};
+  return target
+}
 
 /**
  * 防抖函數
@@ -78,9 +78,9 @@ export const deepClone = (targetElement, origin, setFun) => {
  */
 export const debounce = (callback, delay) => {
   // let now = null
-  let timeoutId;
+  let timeoutId
 
-  const scopeData = {};
+  const scopeData = {}
 
   return new Proxy(() => {}, {
     // set (obj, key, value) {
@@ -91,23 +91,23 @@ export const debounce = (callback, delay) => {
     // },
     get(obj, key) {
       if (scopeData.hasOwnProperty(key)) {
-        return scopeData[key];
+        return scopeData[key]
       }
-      return obj[key];
+      return obj[key]
     },
     apply(obj, thisArg, params) {
       // now = +new Date()
 
       if (timeoutId) {
-        clearInterval(timeoutId);
+        clearInterval(timeoutId)
       }
 
       timeoutId = setTimeout(() => {
-        callback.call(thisArg, ...params);
-      }, delay);
+        callback.call(thisArg, ...params)
+      }, delay)
     },
-  });
-};
+  })
+}
 
 /**
  * 節流函數
