@@ -15,7 +15,6 @@
           v-model:value="formValue.manageSchool"
           placeholder="輸入學校"
           :options="options"
-          multiple
         />
       </n-form-item>
     </n-form>
@@ -68,7 +67,17 @@ const setData = () => {
         filterFrom[prop] = (v) => { return s.test(v) }
         break
       case 'manageSchool':
-        filterFrom[prop] = (v) => { return true }
+        if (formValue.value[prop]) {
+          const tempIndex = formValue.value[prop]
+          filterFrom[prop] = (v) => { 
+            const index =  v.$findIndex(item => {
+              return item === tempIndex
+            })
+            return index > -1
+          }
+        } else {
+          filterFrom[prop] = (v) => { return true }
+        }
         break
       default:
         filterFrom[prop] = (v) => { return true }

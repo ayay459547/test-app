@@ -18,7 +18,8 @@
       "manageSchool": [
         1,
         2
-      ]
+      ],
+      "key": 1
     },
     {
       "id": 2,
@@ -88,8 +89,11 @@
       "email": "testStudent456@gmail.com",
       "fromSchool": [
         1,
-        2
-      ]
+        2,
+        3,
+        4
+      ],
+      "key": 2
     },
     {
       "id": 3,
@@ -99,6 +103,34 @@
       "fromSchool": [
         1,
         2
+      ]
+    }
+  ],
+  "record": [
+    {
+      "id": 1,
+      "name": "紀錄1",
+      "school": 1,
+      "mainTeacher": 1,
+      "subTeacher": null,
+      "studentList": [
+        1, 2, 3
+      ],
+      "dateList": [
+        "2022-01-01",
+        "2022-01-08"
+      ],
+      "checkForm": [
+        {
+          "student": 1,
+          "2022-01-01": true,
+          "2022-01-08": false
+        },
+        {
+          "student": 2,
+          "2022-01-01": true,
+          "2022-01-08": true
+        }
       ]
     }
   ]

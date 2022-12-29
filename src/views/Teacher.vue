@@ -71,6 +71,7 @@ import Create from './TeacherFile/Create.vue'
 import Edit from './TeacherFile/Edit.vue'
 import Delete from './TeacherFile/Delete.vue'
 import { useSchool } from '@/store/school.js'
+import { useTeacher } from '@/store/teacher.js'
 
 export default defineComponent({
   components: {
@@ -85,7 +86,8 @@ export default defineComponent({
     const tableKey = ref(0)
     // store
     const store = {
-      school: useSchool()
+      school: useSchool(),
+      teacher: useTeacher()
     }
     const getSchoolName = (dataId) => {
       const data = store.school.list.find(item => item.id === dataId)
@@ -99,7 +101,7 @@ export default defineComponent({
       name: null,
       phone: null,
       email: null,
-      manageSchool: []
+      manageSchool: null
     })
     const filterFrom = reactive({})
 
@@ -113,7 +115,7 @@ export default defineComponent({
       formValue.name = null
       formValue.phone = null
       formValue.email = null
-      formValue.manageSchool.splice(0)
+      formValue.manageSchool = null
 
       const tempFilterFrom = refFilter.value.getData()
       setFilterFrom(tempFilterFrom)
@@ -244,7 +246,10 @@ export default defineComponent({
     const init = async() => {
       loading.value = true
       teacherData.splice(0)
-      await getTeacherData()
+      await Promise.all([
+        getTeacherData(),
+        store.teacher.init()
+      ])
 
       loading.value = false
     }

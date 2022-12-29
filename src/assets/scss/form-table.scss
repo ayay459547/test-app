@@ -1,0 +1,21 @@
+.table {
+  &-header {
+    display: flex;
+    position: sticky;
+    // border: 1px solid lightcoral;
+  }
+
+  &-body {
+    font-size: 1em;
+    // border: 1px solid lightcyan;  
+  }
+
+  &-row {
+    display: flex;
+  }
+
+  &-column {
+    flex: 1;
+    border: 1px solid #818184;
+  }
+}

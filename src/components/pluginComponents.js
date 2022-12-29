@@ -14,7 +14,7 @@ import {
   NForm,
   NFormItem,
   NSelect
-} from "naive-ui"
+} from 'naive-ui'
 
 const naive = create({
   components: [
@@ -33,18 +33,20 @@ const naive = create({
   ],
 })
 
-import TModal from "./TModal.vue"
-import TButton from "./TButton.vue"
-import TTable from "./TTable.vue"
-import TFilter from "./TFilter.vue"
+import TModal from './TModal.vue'
+import TButton from './TButton.vue'
+import TTable from './TTable.vue'
+import TFilter from './TFilter.vue'
+import FormTable from './FormTable'
 
 const pluginComponents = {
   install(app) {
     app.use(naive)
-    app.component("TModal", TModal)
-    app.component("TButton", TButton)
-    app.component("TTable", TTable)
-    app.component("TFilter", TFilter)
+    app.component('TModal', TModal)
+    app.component('TButton', TButton)
+    app.component('TTable', TTable)
+    app.component('TFilter', TFilter)
+    app.component('FormTable', FormTable)
   },
 }
 

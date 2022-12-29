@@ -32,7 +32,7 @@ export default defineComponent({
     }
     
     const init = () => {
-      loading.value = true
+      // loading.value = true
 
       Promise.all([
         store.student.init(),

@@ -81,6 +81,39 @@ const objectFunc = {
       }
       return temp
     } 
+  },
+  $findIndex: {
+    inject: true,
+    func (callback, thisArg) {
+      thisArg = thisArg || window
+      for (let key in this) {
+        if (this.hasOwnProperty(key) && callback.call(thisArg, this[key], key)) {
+          if (!Number.isNaN(parseInt(key))) {
+            return parseInt(key)
+          } else {
+            return key
+          }
+        }
+      }
+      return -1
+    }
+  },
+  $toArray: {
+    injext: true,
+    func () {
+      thisArg = thisArg || window
+      const temp = []
+      for (let key in this) {
+        if (this.hasOwnProperty(key)) {
+          if (!Number.isNaN(parseInt(key))) {
+            temp[key] = this[key]
+          } else {
+            temp.push(this[key])
+          }
+        }
+      }
+      return temp
+    }
   }
 }
 
