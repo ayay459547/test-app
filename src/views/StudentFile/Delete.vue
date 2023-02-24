@@ -34,6 +34,9 @@ defineExpose({
       url: `/student/${rowId}`,
       method: 'delete', 
       data
+    },{
+      fakeData: null,
+      getFakeData: true
     })
   }
 })

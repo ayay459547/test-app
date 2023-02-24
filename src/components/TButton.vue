@@ -1,9 +1,22 @@
 <template>
-  <n-button :type="type" strong ghost>
-    <template v-if="icon !== null" #icon>
-      <n-icon :component="icon" size="20" :color="color"/>
+  <n-button 
+    :type="type" 
+    strong 
+    ghost
+    :circle="props.circle"
+    :round="props.round"
+    :quaternary="props.quaternary"
+  >
+    <template v-if="props.icon !== null" #icon>
+      <n-icon :component="props.icon" size="20" :color="props.color"/>
     </template>
-    <div class="btn-title" :style="textStyle">{{ title }}</div>
+    <div
+      v-if="props.title !== ''"
+      class="btn-title" 
+      :style="textStyle"
+    >
+      {{ props.title }}
+    </div>
   </n-button>
 </template>
 <script setup>
@@ -12,7 +25,7 @@ import { defineProps, computed } from 'vue'
 const props = defineProps({
   title: {
     type: String,
-    default: '按鈕'
+    default: ''
   },
   type: {
     type: String,
@@ -25,6 +38,14 @@ const props = defineProps({
   icon: {
     type: Object,
     default: null
+  },
+  circle: {
+    type: Boolean,
+    default: false
+  },
+  round : {
+    type: Boolean,
+    defalut: false
   }
 })
 

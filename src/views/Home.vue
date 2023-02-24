@@ -1,17 +1,16 @@
 <template>
   <div class="home-wrapper grid-row" v-loading="loading">
-    <div class="home-calendar grid-col-xl-8">
+    <div class="home-calendar grid-col-xl-16">
       <n-calendar 
         :style="{ width: '100%', height: '100%' }" 
         v-model:value="value" #="{ year, month, date }"
-        :is-date-disabled="isDateDisabled" 
         @update:value="handleUpdateValue"
       >
         {{ calendarData[`${year}-${month}-${date}`] ?? '' }}
       </n-calendar>
     </div>
 
-    <div class="home-tip grid-col-xl-4">
+    <div class="home-tip grid-col-xl-8">
       <div style="font-size: 3em">content</div>
     </div>
 
@@ -33,8 +32,9 @@
 
 <script>
 import { defineComponent, ref, reactive, onMounted } from "vue"
-import { isYesterday, addDays } from "date-fns/esm"
+import { addDays } from "date-fns/esm"
 import http from '@/lib/axios.js'
+import { useNotification } from 'naive-ui'
 
 export default defineComponent({
   setup() {
@@ -46,8 +46,10 @@ export default defineComponent({
         url: '/dashboard',
         method: 'get',
       }, {
-        fakeData: [],
-        getFakeData: false
+        fakeData: [
+          { id: '2023-2-23', ps: 'fakeData' }
+        ],
+        getFakeData: true
       }).then(dateList => {
         dateList.forEach(dateItem => {
           calendarData[dateItem.id] = dateItem.ps
@@ -70,6 +72,7 @@ export default defineComponent({
     const modalData = ref('')
     const currentDate = ref('')
     const showModal = ref(false)
+    const notification = useNotification()
 
     const setCalendarData = () => {
       loading.value = true
@@ -98,7 +101,20 @@ export default defineComponent({
         method = 'post'
       }
 
-      http({ url, method, data }).then(() => {
+      http(
+        { url, method, data },
+        {
+          fakeData: null,
+          getFakeData: true
+        }
+      ).then(() => {
+        const type = 'success'
+        notification[type]({
+          content: "成功",
+          meta: "資料更新",
+          duration: 1500,
+          keepAliveOnHover: true
+        })
         init()
       })
     }
@@ -110,12 +126,6 @@ export default defineComponent({
         modalData.value = calendarData[`${year}-${month}-${date}`] ?? ''
         currentDate.value = `${year}-${month}-${date}`
         showModal.value = true
-      },
-      isDateDisabled(timestamp) {
-        if (isYesterday(timestamp)) {
-          return true
-        }
-        return false
       },
       calendarData,
       showModal,

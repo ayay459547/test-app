@@ -1,6 +1,24 @@
 
 import { h } from 'vue'
 
+function getColumnSlotNode (slots, columnKey, isHeader) {
+  let temp = null
+  if (isHeader) {
+    temp = slots[`header-${columnKey}`]
+    if (![null, undefined, ''].includes(temp)) return temp
+
+    temp = slots[`header`]
+    if (![null, undefined, ''].includes(temp)) return temp
+  } else {
+    temp = slots[`column-${columnKey}`]
+    if (![null, undefined, ''].includes(temp)) return temp
+
+    temp = slots[`column`]
+    if (![null, undefined, ''].includes(temp)) return temp
+  }
+  return null
+}
+
 const columnNode = (slots, column, rowItem, isHeader) => {
   return column.map(columnItem => {
     const { 
@@ -9,14 +27,15 @@ const columnNode = (slots, column, rowItem, isHeader) => {
       minWidth = 0, 
       class: columnClass = '',
       style: columnStyle = '',
-      key: columnKey = ''
+      key: columnKey = '',
+      index: columnIndex = 0
     } = columnItem
 
     const {
       index: rowIndex = 0
     } = rowItem
 
-    const columnNode = isHeader ? slots[`header-${columnKey}`] : slots[`column-${columnKey}`]
+    const columnNode = getColumnSlotNode(slots, columnKey, isHeader)
 
     let showClass = null
     if (typeof columnClass === 'string') {
@@ -32,33 +51,44 @@ const columnNode = (slots, column, rowItem, isHeader) => {
     let showStyle = null
     if (typeof columnStyle === 'string') {
       showStyle = columnStyle
+
+      if (width > 0) {
+        showStyle += `width: ${width}px;`
+      }
+      if (minWidth > 0) {
+        showStyle += `min-width: ${minWidth}px;`
+      }
     } else if(Object.prototype.toString.call(columnStyle) === '[object Object]') {
       showStyle = {...columnStyle}
+
+      if (width > 0) {
+        showStyle['width'] = `${width}px`
+      }
+      if (minWidth > 0) {
+        showStyle['minWidth'] = `${minWidth}px`
+      }
     } else {
       showStyle = {}
     }
 
-    const defalutNode = isHeader ? title : rowItem[columnKey]
+    const defaultRender = isHeader ? title : rowItem[columnKey]
 
     return h(
       'div',
       {
-        width: `${width}px`,
-        minWidth: `${minWidth}px`,
         class: {
             ...showClass,
           'table-column': true
         },
-        style: {
-          ...showStyle
-        },
-        key: columnKey
+        style: showStyle,
+        // key: columnKey
       },
       ![undefined, null].includes(columnNode) ? columnNode({
         key: columnKey,
-        index: rowIndex,
-        data: defalutNode
-      }) : defalutNode
+        rowIndex,
+        columnIndex,
+        data: defaultRender
+      }) : defaultRender
     )
   })
 }
@@ -95,8 +125,8 @@ const headerNode = (slots, column) => {
 const bodyNode = (slots, column, row) => {
   if (row.length === 0) {
     return h('div', { 
-      class: 'flex-row content-center',
-      style: 'padding: 8px'
+      class: 'flex-row content-center table-body',
+      style: 'padding: 16px; font-size: 1.2em'
     }, '無資料')
   } else {
     return h(
@@ -110,20 +140,25 @@ const bodyNode = (slots, column, row) => {
 }
 
 const vnode = (props, context) => {
-  console.log('context => ', context)
-  console.log('props => ', props)
-
   const { slots = {} } = context
-  const { column = [], row = [] } = props
+  const { column = [], row = [], tableStyle = {}, tableClass = {} } = props
+
   return h(
     'div',
-    {
-      class: 'table-main'
+    { 
+      class: [
+        { ...tableClass },
+        'table-wrapper'
+      ],
+      style: { ...tableStyle }
     },
-    [
-      headerNode(slots, column),
-      bodyNode(slots, column, row)
-    ]
+    h(
+      'div', { class: 'table-container'},
+      [
+        headerNode(slots, column),
+        bodyNode(slots, column, row)
+      ]
+    )
   )
 }
 

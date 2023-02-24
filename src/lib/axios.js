@@ -13,11 +13,11 @@ export default function (config, options = {}) {
     ...options,
   }
 
-  if (options.PromisegetFakeData) {
-    return Promise.resolve({
-      data: options.fakeData,
-      status: "success",
-    })
+  if (
+    process.env.VUE_APP_CONNECT_API === 'false' &&
+    options.getFakeData
+  ) {
+    return Promise.resolve(options.fakeData)
   }
 
   const instance = axios.create({

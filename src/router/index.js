@@ -3,9 +3,11 @@ import Home from "@/views/Home.vue"
 
 import { Grid, School as Student } from "@vicons/ionicons5"
 
-import { ChalkboardTeacher, School } from "@vicons/fa"
+import { ChalkboardTeacher, School, ChartBar } from "@vicons/fa"
 
-import { DataTable } from "@vicons/carbon"
+import { Map2 } from "@vicons/tabler"
+
+import { DataTable, AccumulationIce } from "@vicons/carbon"
 
 export const routes = [
   {
@@ -42,6 +44,27 @@ export const routes = [
     title: "記錄管理",
     icon: DataTable,
     component: () => import("@/views/Record.vue"),
+  },
+  {
+    path: "/map",
+    name: "Map",
+    title: "地圖",
+    icon: Map2,
+    component: () => import("@/views/Map"),
+  },
+  {
+    path: "/chart",
+    name: "Chart",
+    title: "圖表",
+    icon: ChartBar,
+    component: () => import("@/views/Chart"),
+  },
+  {
+    path: "/test",
+    name: "Test",
+    title: "測試",
+    icon: AccumulationIce,
+    component: () => import("@/views/Test.vue"),
   },
 ]
 

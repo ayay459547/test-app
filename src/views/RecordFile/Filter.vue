@@ -4,12 +4,6 @@
       <n-form-item label="名稱" path="name">
         <n-input v-model:value="formValue.name" placeholder="输入名稱" />
       </n-form-item>
-      <n-form-item label="電話" path="phone">
-        <n-input v-model:value="formValue.phone" placeholder="输入電話" />
-      </n-form-item>
-      <n-form-item label="Email" path="email">
-        <n-input v-model:value="formValue.email" placeholder="輸入Email" />
-      </n-form-item>
       <n-form-item label="學校" path="fromSchool">
         <n-select
           v-model:value="formValue.fromSchool"
@@ -53,7 +47,7 @@ const formValue = computed({
   set: v => emit('update:form', v)
 })
 
-const filterPropsList = ['name', 'phone', 'email', 'fromSchool']
+const filterPropsList = ['name', 'fromSchool']
 
 const filterFrom = reactive({})
 
@@ -61,8 +55,6 @@ const setData = () => {
   filterPropsList.forEach(prop => {
     switch (prop) {
       case 'name':
-      case 'phone':
-      case 'email':
         const s = new RegExp(`${formValue.value[prop] ?? ''}`)
         filterFrom[prop] = (v) => { return s.test(v) }
         break

@@ -31,9 +31,12 @@ defineExpose({
   },
   upload(data, rowId) {
     return http({ 
-      url: `/student/${rowId}`,
+      url: `/record/${rowId}`,
       method: 'delete', 
       data
+    },{
+      fakeData: null,
+      getFakeData: true
     })
   }
 })

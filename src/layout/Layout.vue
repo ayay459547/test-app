@@ -1,7 +1,8 @@
 <template>
   <div class="layout-container">
     <header class="layout-header">
-      <h1 class="layout-title">Time Sheet Manage System</h1>
+      <h1 class="layout-title">{{ title }}</h1>
+      <!-- <button @click="test">changeTest</button> -->
 
       <n-button class="layout-btn" @click="isShow = true" block>
         <template #icon>
@@ -24,7 +25,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed, inject } from 'vue'
 import SideBar from './SideBar.vue'
 import { Bars } from '@vicons/fa'
 
@@ -42,9 +43,17 @@ export default defineComponent({
     }
   },
   setup() {
+    const change = inject('change')
+    const title = computed(() => {
+      return process?.env?.VUE_APP_TITLE ?? ''
+    })
     return {
       isShow: ref(false),
-      Bars
+      title,
+      Bars,
+      test: () => {
+        change()
+      }
     }
   }
 })

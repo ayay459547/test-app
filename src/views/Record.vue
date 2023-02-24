@@ -3,7 +3,7 @@
     <div class="record-header">
       <TButton 
         title="新增" 
-        type="info"
+        type="primary"
         class="n-mb-md"
         :icon="Add12Filled"
         @click="openCreate"
@@ -75,6 +75,8 @@ import Delete from './RecordFile/Delete.vue'
 import { useSchool } from '@/store/school.js'
 import { useStudent } from '@/store/student.js'
 import { useTeacher } from '@/store/teacher.js'
+import { FakeData } from './RecordFile/FakeData.js'
+import { useNotification } from 'naive-ui'
 
 export default defineComponent({
   components: {
@@ -246,8 +248,8 @@ export default defineComponent({
         url: '/record',
         method: 'get',
       }, {
-        fakeData: [],
-        getFakeData: false
+        fakeData: FakeData,
+        getFakeData: true
       }).then(dateList => {
         dateList.forEach(dateItem => {
           recordData.push({
@@ -281,6 +283,7 @@ export default defineComponent({
       delete: false
     })
 
+    const notification = useNotification()
     // create
     const refCreate = ref(null)
     const openCreate = () => {
@@ -290,6 +293,13 @@ export default defineComponent({
       const createData = refCreate.value.getData()
       const res = refCreate.value.upload(createData)
       res.then(() => {
+        const type = 'success'
+        notification[type]({
+          content: "成功",
+          meta: "資料更新",
+          duration: 1500,
+          keepAliveOnHover: true
+        })
         init()
         showModal.create = false
       })
@@ -309,6 +319,13 @@ export default defineComponent({
       const rowId = editData.id
       const res = refEdit.value.upload(editData, rowId)
       res.then(() => {
+        const type = 'success'
+        notification[type]({
+          content: "成功",
+          meta: "資料更新",
+          duration: 1500,
+          keepAliveOnHover: true
+        })
         init()
         showModal.edit = false
       })
@@ -328,6 +345,13 @@ export default defineComponent({
       const rowId = delData.id
       const res = refDelete.value.upload(delData, rowId)
       res.then(() => {
+        const type = 'success'
+        notification[type]({
+          content: "成功",
+          meta: "資料更新",
+          duration: 1500,
+          keepAliveOnHover: true
+        })
         init()
         showModal.delete = false
       })

@@ -38,6 +38,9 @@ defineExpose({
       url: '/school', 
       method: 'post', 
       data
+    },{
+      fakeData: null,
+      getFakeData: true
     })
   }
 })

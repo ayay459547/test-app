@@ -1,29 +1,43 @@
 <template>
   <n-config-provider :theme="darkTheme">
-    <Layout :routerData="routes" v-loading="loading">
-      <template #routerView>
-        <router-view />
-      </template>
-    </Layout>
+    <n-notification-provider>
+      <Layout :routerData="routes" v-loading="loading">
+        <template #routerView>
+          <router-view />
+        </template>
+      </Layout>
+    </n-notification-provider>
   </n-config-provider>
 </template>
 
 <script>
-import { ref, defineComponent, onMounted } from 'vue'
+import { ref, defineComponent, onMounted, provide } from 'vue'
 import { darkTheme } from 'naive-ui'
 import Layout from '@/layout/Layout.vue'
 import { routes } from '@/router'
 import { useStudent } from '@/store/student.js'
 import { useTeacher } from '@/store/teacher.js'
 import { useSchool } from '@/store/school.js'
+import { NNotificationProvider } from 'naive-ui'
 // import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: {
-    Layout
+    Layout,
+    NNotificationProvider
   },
   setup() {
     const loading = ref(false)
+    const test = ref('test')
+
+    provide('change', () => {
+      if (test.value) {
+        test.value = null
+      } else {
+        test.value = 'test'
+      }
+      console.log(test)
+    })
 
     const store = {
       student: useStudent(),
@@ -51,8 +65,8 @@ export default defineComponent({
     return {
       loading,
       init,
-      darkTheme,
-      routes
+      routes,
+      darkTheme
     }
   }
 })

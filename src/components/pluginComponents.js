@@ -13,7 +13,10 @@ import {
   NPopover,
   NForm,
   NFormItem,
-  NSelect
+  NSelect,
+  NDatePicker,
+  NCheckbox,
+  NSwitch,
 } from 'naive-ui'
 
 const naive = create({
@@ -29,24 +32,37 @@ const naive = create({
     NPopover,
     NForm,
     NFormItem,
-    NSelect
-  ],
+    NSelect,
+    NDatePicker,
+    NCheckbox,
+    NSwitch,
+  ]
 })
 
 import TModal from './TModal.vue'
 import TButton from './TButton.vue'
 import TTable from './TTable.vue'
 import TFilter from './TFilter.vue'
-import FormTable from './FormTable'
+import FormTable from './FormTable.js'
+
+import VGoogleMap from './VGoogleMap.vue'
+import VChart from './VChart.vue'
+
+import Draggable from 'vue3-draggable'
 
 const pluginComponents = {
   install(app) {
     app.use(naive)
+    app.component('Draggable', Draggable)
+
+    app.component('FormTable', FormTable)
+
     app.component('TModal', TModal)
     app.component('TButton', TButton)
     app.component('TTable', TTable)
     app.component('TFilter', TFilter)
-    app.component('FormTable', FormTable)
+    app.component('VGoogleMap', VGoogleMap)
+    app.component('VChart', VChart)
   },
 }
 

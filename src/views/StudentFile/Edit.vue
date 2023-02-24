@@ -82,6 +82,9 @@ defineExpose({
       url: `/student/${rowId}`,
       method: 'put', 
       data
+    },{
+      fakeData: null,
+      getFakeData: true
     })
   }
 })
