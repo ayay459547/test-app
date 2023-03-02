@@ -7,17 +7,17 @@ import axios from "axios"
  * @return {Promise}
  */
 export default function (config, options = {}) {
-  options = {
+  const tempOptions = {
     fakeData: null,
     getFakeData: false,
     ...options,
   }
-
+  const { fakeData, getFakeData } = tempOptions
   if (
     process.env.VUE_APP_CONNECT_API === 'false' &&
-    options.getFakeData
+    getFakeData
   ) {
-    return Promise.resolve(options.fakeData)
+    return Promise.resolve(fakeData)
   }
 
   const instance = axios.create({

@@ -1,42 +1,69 @@
 <template>
-  <div class="map-wrapper">
-    <div ref="mapRef" class="map-container">
-      <VGoogleMap mapTypeId="hybrid"></VGoogleMap>
+  <div class="map-wrapper grid-row">
+    <div class="map-container grid-col-lg-16">
+      <VGoogleMap
+        ref="mapRef"
+        mapTypeId="roadmap" 
+        position
+        :service="service"
+        @sendOptions="setOptions"
+        @sendPlace="getPlace"
+      ></VGoogleMap>
+    </div>
+
+    <div class="map-control grid-col-lg-8">
+      <n-auto-complete
+        v-model:value="inputText"
+        :options="options"
+        clearable
+        @update:value="onAutocompleteUpdate"
+        @select="onSelect"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, computed } from 'vue'
-import { throttle } from '@/lib/throttle.js'
+import { ref, reactive } from 'vue'
 
-let mapHeight = ref(500)
-const ROcallback = throttle((entries) => {
-  entries.forEach((entry) => {
-    mapHeight.value = entry.contentRect.height
-  })
-}, 100)
-const RO = new ResizeObserver(ROcallback)
 const mapRef = ref(null)
+const inputText = ref('')
 
-const mapStyle = computed(() => {
-  return {
-    width: '100%',
-    style: `${Math.floor(mapHeight.value)}px`
+const options = reactive([])
+
+const onAutocompleteUpdate = (text) => {
+  if ([null, ''].includes(text) || text.length <= 0) return
+
+  if (mapRef) {
+    mapRef.value.getPlacePredictions(text)
   }
-})
+}
+const setOptions = (list) => {
+  console.log(list)
+  options.splice(0)
+  const temp = list.map(item => {
+    return {
+      label: item.description,
+      value: item?.place_id ?? item.description
+    }
+  })
+  options.push(...temp)
+}
 
-onMounted(() => {
-  if (mapRef.value !== null) {
-    RO.observe(mapRef.value)
+const onSelect = (placeId) => {
+  console.log(placeId)
+  if (mapRef) {
+    mapRef.value.getDetails(placeId)
   }
-})
+}
+const getPlace = (placeDetail) => {
+  console.log(placeDetail)
+}
 
-onUnmounted(() => {
-  RO.disconnect()
-})
-
-const center = {lat: 51.093048, lng: 6.842120}
+const service = {
+  inject: true,
+  inputText: inputText.value
+}
 
 </script>
 
@@ -45,16 +72,19 @@ const center = {lat: 51.093048, lng: 6.842120}
   &-wrapper {
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    box-sizing: border-box;
+    padding: 16px;
   }
   
   &-container {
-    width: calc(100% - 64px);
-    height: calc(100% - 64px);
-    background-color: #fff;
+    width: inherit;
+    height: inherit;
     overflow: hidden;
+  }
+
+  &-control {
+    width: inherit;
+    height: inherit;
   }
 }
 </style>

@@ -6,7 +6,8 @@
           v-for="router in routerData" 
           class="side-link" 
           :class="{ 'active': currentPath === router.path }"
-          :to="router.path" :key="router.path"
+          :to="router.path" 
+          :key="router.path"
         >
           <n-icon :component="router.icon" size="24" :depth="3" />
           <span class="side-title">{{ router.title }}</span>

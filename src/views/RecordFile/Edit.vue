@@ -216,24 +216,23 @@ function setCheckForm (v, rowIndex, columnIndex, type) {
 
   if ([null, undefined].includes(formValue.checkForm[rowIndex][date])) {
     formValue.checkForm[rowIndex][date] = {
-      attend: false,
+      attend: 'false',
       ps: ''
     }
   }
 
-  formValue.checkForm[rowIndex][date][type] = v
+  formValue.checkForm[rowIndex][date][type] = `${v}`
 }
 
 function getCheckForm (rowIndex, columnIndex, type) {
   const date = formValue.dateList[columnIndex]
 
-  const form = formValue.checkForm[rowIndex][date] ?? {}
-
-  if (type === 'attend') {
-    return form.attend ?? true
-  } else if (type === 'ps') {
-    return form.ps ?? ''
+  const form = formValue.checkForm[rowIndex][date] ?? {
+    attend: 'true',
+    ps: ''
   }
+
+  return form[type]
 }
 
 function addDate () {
@@ -250,7 +249,10 @@ const sutendtList = computed(() => {
 function addStudent () {
   // formValue.studentList.push(studentId)
   formValue.checkForm.push({
-    student: null
+    student: {
+      attend: 'false',
+      ps: ''
+    }
   })
 }
 function removeStudent (rowIndex) {

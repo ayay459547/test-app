@@ -17,22 +17,22 @@ export const FakeData = [
       {
         student: 1,
         '2022-01-01': {
-          attend: true,
+          attend: 'true',
           ps: 'test'
         },
         '2022-01-08': {
-          attend: false,
+          attend: 'false',
           ps: 'test555'
         }
       },
       {
         student: 3,
         '2022-01-01': {
-          attend: false,
+          attend: 'false',
           ps: 'b123'
         },
         '2022-01-08': {
-          attend: false,
+          attend: 'false',
           ps: 'a777'
         }
       }

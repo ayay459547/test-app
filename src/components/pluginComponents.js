@@ -17,6 +17,7 @@ import {
   NDatePicker,
   NCheckbox,
   NSwitch,
+  NAutoComplete,
 } from 'naive-ui'
 
 const naive = create({
@@ -36,6 +37,7 @@ const naive = create({
     NDatePicker,
     NCheckbox,
     NSwitch,
+    NAutoComplete,
   ]
 })
 

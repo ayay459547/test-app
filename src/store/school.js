@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import http from '@/lib/axios.js'
 import { reactive } from 'vue'
+import { schoolFakeData } from './FakeData'
 
 export const useSchool = defineStore('school', () => {
   const list = reactive([])
@@ -14,8 +15,8 @@ export const useSchool = defineStore('school', () => {
         method: 'get',
       },
       {
-        fakeData: [],
-        getFakeData: false,
+        fakeData: schoolFakeData,
+        getFakeData: true,
       }
     ).then((dateList) => {
       dateList.forEach((dateItem) => {
