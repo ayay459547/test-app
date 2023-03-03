@@ -38,7 +38,7 @@ const props = defineProps({
   position: {
     type: Boolean,
     default: false,
-    description: `是否在初始化的圖時 定位`
+    description: `是否在初始化的圖時 定位當前位置`
   },
   initCallback: {
     type: Function,
@@ -51,22 +51,33 @@ const props = defineProps({
     type: Object,
     default () {
       return {
-        inject: false,
-        inputText: ''
+        marker: false,
+        places: false,
+        autocompleteService: false,
+        directionsService: false,
+        directionsRenderer: false,
+        infoWindow: false
       }
     }
   }
 
 })
 
-const emit = defineEmits(['sendOptions', 'sendPlace'])
+const emit = defineEmits([
+  'sendOptions', 
+  'sendPlace',
+  'currentPosition'
+])
 
 const states = reactive({
   google: null,
   map: null,
-  markers: null,
-  service: null,
-  places: null
+  marker: null,
+  places: null,
+  autocompleteService: null,
+  directionsService: null,
+  directionsRenderer: null,
+  infoWindow: null,
 })
 const mapRef = ref(null)
 
@@ -75,7 +86,23 @@ const currentPosition = reactive({
   lng: 0
 })
 
-// service
+// map
+const setCenter = (position) => {
+  if (states.map) {
+    states.map.setCenter(position)
+  }
+}
+// marker
+const createMarker = (position, placeId = '') => {
+  if (typeof states.marker === 'object' && placeId.length > 0) {
+    const tempMarker = new states.google.maps.Marker({
+      map: states.map,
+      position
+    })
+    states.marker[placeId] = tempMarker
+  }
+}
+// autocompleteService
 const displaySuggestions = (predictions, status) => {
   const tempOptions = []
   if (status === 'OK') {
@@ -86,8 +113,8 @@ const displaySuggestions = (predictions, status) => {
   emit('sendOptions', tempOptions)
 }
 const getPlacePredictions = (text = '') => {
-  if (states.service && text.length > 0) {
-    states.service.getPlacePredictions(
+  if (states.autocompleteService && text.length > 0) {
+    states.autocompleteService.getPlacePredictions(
       { 
         input: text,
         bounds: {
@@ -118,6 +145,62 @@ const getDetails = (placeId = '') => {
     )
   }
 }
+// infoWindow
+const createInfoWindow = (target, duration) => {
+  if (typeof states.infoWindow === 'object' && target.placeId.length > 0) {
+    const tempInfoWindow = new states.google.maps.InfoWindow()
+    tempInfoWindow.setContent(`
+      <h3>${target?.name ?? ''}</h3>
+      <div>地址: ${target?.address ?? ''}</div>
+      <div>電話: ${target?.phoneNumber ?? ''}</div>
+      <div>評分: ${target?.rating ?? ''}</div>
+      <div>步行時間: ${duration ?? ''}</div>
+    `)
+    states.infoWindow[target.placeId] = tempInfoWindow
+  }
+}
+const openInfowindow = (placeId = '') => {
+  if (placeId.length > 0 && states.infoWindow.hasOwnProperty(placeId)) {
+    states.infoWindow[placeId].open(states.map, states.marker[placeId])
+  }
+}
+// route
+const setRoute = async (origin, target) => {
+  const settingOrigin = {
+    location: { lat: 0, lng: 0 },
+    placeId: '',
+    name: '起始位置',
+    address: '',
+    phoneNumber: '',
+    rating: '',
+    ...origin
+  }
+  const settingTarget = {
+    location: { lat: 0, lng: 0 },
+    placeId: '',
+    name: '',
+    address: '',
+    phoneNumber: '',
+    rating: '',
+    ...target
+  }
+  if (states.directionsService) {
+    const { lat, lng } = settingOrigin.location
+    await states.directionsService.route({
+      origin: new states.google.maps.LatLng(lat, lng),
+      destination: {
+        placeId: settingTarget.placeId
+      },
+      travelMode: 'WALKING'
+    }, (response, status) => {
+      if (status === 'OK') {
+        states.directionsRenderer.setDirections(response)
+        const duration = response.routes[0].legs[0].duration.text
+        createInfoWindow(settingTarget, duration)
+      }
+    })
+  }
+}
 
 const initMap = async () => {
   const { 
@@ -130,6 +213,16 @@ const initMap = async () => {
   } = props
   const { lat, lng } = center
 
+  const settingService = {
+    marker: false,
+    places: false,
+    autocompleteService: false,
+    directionsService: false,
+    directionsRenderer: false,
+    infoWindow: false,
+    ...service
+  }
+
   // google
   const loader = new Loader({
     apiKey: process.env.VUE_APP_GOOGLE_MAP_API,
@@ -138,7 +231,6 @@ const initMap = async () => {
     language: "zh-TW",
   })
   states.google = await loader.load()
-
   // map
   states.map = new states.google.maps.Map(mapRef.value, {
     center: { lat , lng },
@@ -147,25 +239,44 @@ const initMap = async () => {
     // mapTypeControl: true,
     // fullscreenControl: true,
   })
+  // marker
+  if (settingService.marker) {
+    states.marker = {}
+  }
+  // places
+  if (settingService.places) {    
+    states.places = new states.google.maps.places.PlacesService(states.map)
+  }
+  // autocompleteService
+  if (settingService.autocompleteService) {    
+    states.autocompleteService = new states.google.maps.places.AutocompleteService()
+  }
+  // directionsService
+  if (settingService.directionsService) {
+    states.directionsService = new states.google.maps.DirectionsService()
+  }
+  // directionsRenderer
+  if (settingService.directionsRenderer) {
+    states.directionsRenderer = new states.google.maps.DirectionsRenderer({
+      map: states.map
+    })
+
+    states.directionsRenderer.set('directions', null)
+  }
+  if (settingService.infoWindow) {
+    states.infoWindow = {}
+  }
 
   if (position) {
     navigator.geolocation.getCurrentPosition((pos) => {
       currentPosition.lat = pos.coords.latitude
       currentPosition.lng = pos.coords.longitude
 
-      states.map.setCenter(currentPosition)
+      setCenter(currentPosition)
+      createMarker(currentPosition, 'center')
+      emit('currentPosition', currentPosition)
       states.map.setZoom(16)
     })
-  }
-  // places
-  if (states.google && states.map) {    
-    states.places = new states.google.maps.places.PlacesService(states.map)
-  }
-
-  // service
-  if (service?.inject && states.google) {    
-    states.service = new states.google.maps.places.AutocompleteService()
-    getPlacePredictions(service.inputText)
   }
 
   initCallback()
@@ -175,7 +286,11 @@ defineExpose({
   states,
   currentPosition,
   getPlacePredictions,
-  getDetails
+  getDetails,
+  setCenter,
+  createMarker,
+  setRoute,
+  openInfowindow
 })
 
 onMounted(() => {

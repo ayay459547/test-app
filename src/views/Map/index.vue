@@ -7,7 +7,8 @@
         position
         :service="service"
         @sendOptions="setOptions"
-        @sendPlace="getPlace"
+        @currentPosition="setOrigin"
+        @sendPlace="setTarget"
       ></VGoogleMap>
     </div>
 
@@ -28,7 +29,6 @@ import { ref, reactive } from 'vue'
 
 const mapRef = ref(null)
 const inputText = ref('')
-
 const options = reactive([])
 
 const onAutocompleteUpdate = (text) => {
@@ -39,7 +39,6 @@ const onAutocompleteUpdate = (text) => {
   }
 }
 const setOptions = (list) => {
-  console.log(list)
   options.splice(0)
   const temp = list.map(item => {
     return {
@@ -50,19 +49,55 @@ const setOptions = (list) => {
   options.push(...temp)
 }
 
+
+const origin = reactive({
+  location: {},
+  placeId: '',
+  name: '當前位置',
+  address: '',
+  phoneNumber: '',
+  rating: '',
+})
+const setOrigin = (currentPosition) => {
+  origin.location = currentPosition
+}
+
+const target = reactive({
+  location: {},
+  placeId: '',
+  name: '',
+  address: '',
+  phoneNumber: '',
+  rating: '',
+})
 const onSelect = (placeId) => {
-  console.log(placeId)
   if (mapRef) {
     mapRef.value.getDetails(placeId)
   }
 }
-const getPlace = (placeDetail) => {
-  console.log(placeDetail)
+const setTarget = async (placeDetail) => {
+  target.location = placeDetail.geometry.location
+  target.placeId = placeDetail.place_id
+  target.name = placeDetail.name
+  target.address = placeDetail.formatted_address
+  target.phoneNumber = placeDetail.formatted_phone_number
+  target.rating = placeDetail.rating
+
+  if (mapRef) {
+    await mapRef.value.createMarker(target.location, target.placeId)
+
+    await mapRef.value.setRoute(origin, target)
+    mapRef.value.openInfowindow(target.placeId)
+  }
 }
 
 const service = {
-  inject: true,
-  inputText: inputText.value
+  marker: true,
+  places: true,
+  autocompleteService: true,
+  directionsService: true,
+  directionsRenderer: true,
+  infoWindow: true,
 }
 
 </script>
