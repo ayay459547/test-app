@@ -1,5 +1,8 @@
 # check-in-app
 
+## Demo
+https://ayay459547.github.io/test-app/
+
 ## Project setup
 ```
 npm install
